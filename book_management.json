@@ -1,0 +1,228 @@
+{
+  "openapi": "3.0.3",
+  "servers": [
+    {
+      "url": "http://bookmanagement.org"
+    }
+  ],
+  "info": {
+    "description": "This is a training app for discovering abilities of OpenAPI",
+    "version": "0.0.1",
+    "title": "Book Manager"
+  },
+  "tags": [
+    {
+      "name": "book",
+      "description": "Everything about books in the library"
+    }
+  ],
+  "paths": {
+    "/book": {
+      "post": {
+        "tags": [
+          "book"
+        ],
+        "summary": "Add a new book to the library",
+        "description": "",
+        "operationId": "addBook",
+        "responses": {
+          "201": {
+            "description": "object successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Book"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Invalid input"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Book"
+        }
+      },
+      "put": {
+        "tags": [
+          "book"
+        ],
+        "summary": "Update an existing book",
+        "description": "",
+        "operationId": "updateBook",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Book"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Book not found"
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Book"
+        }
+      },
+      "get": {
+        "tags": [
+          "book"
+        ],
+        "summary": "Get list of all books in library",
+        "description": "",
+        "operationId": "getBooksList",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "aplication/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/books"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "List not found"
+          }
+        }
+      }
+    },
+    "/book/{bookId}": {
+      "get": {
+        "tags": [
+          "book"
+        ],
+        "summary": "Gets info about the given book",
+        "description": "",
+        "operationId": "getBookById",
+        "parameters": [
+          {
+            "name": "bookId",
+            "in": "path",
+            "description": "ID of the book to return",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "succesful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Book"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invelid ID supplied"
+          },
+          "404": {
+            "description": "Book not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": "-book",
+        "summary": "Deletes a given book",
+        "description": "",
+        "operationId": "deleteBook",
+        "parameters": [
+          {
+            "name": "bookId",
+            "in": "path",
+            "description": "ID of the book to be deleted",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Book successfully deleted"
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Book not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "requestBodies": {
+      "Book": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#components/schemas/Book"
+            }
+          },
+          "description": "Book object that needs to be added to the library",
+          "required": true
+        }
+      }
+    },
+    "schemas": {
+      "Book": {
+        "title": "Book in the library",
+        "description": "All info about a book",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "title": {
+            "type": "string"
+          },
+          "author": {
+            "type": "string"
+          },
+          "isbn": {
+            "type": "string",
+            "pattern": "\\d\\d\\d-\\d-\\d\\d-\\d\\d\\d\\d\\d\\d-\\d"
+          },
+          "isAvailable": {
+            "type": "boolean"
+          },
+          "releaseDate": {
+            "type": "string",
+            "format": "date"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "author",
+          "isbn"
+        ]
+      },
+      "Books": {
+        "type": "array",
+        "description": "Array of book objects",
+        "items": {
+          "$ref": "#/components/schemas/Book"
+        }
+      }
+    }
+  }
+}
